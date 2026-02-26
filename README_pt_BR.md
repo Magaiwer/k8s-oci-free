@@ -111,6 +111,36 @@ enable_telemetry  = false  # Instala Loki (Logs centralizados) e OpenTelemetry C
 
 Assim que essas variáveis forem alteradas e você rodar um `terraform apply`, o script fará o provisionamento automático via contêineres e Helm Charts utilizando as credenciais recém geradas do seu Kubeconfig local.
 
+### 🌐 Acessando a UI do Headlamp
+
+Como o Headlamp foi instalado via NodePort, você tem duas formas de acessá-lo:
+
+**Opção 1: Acesso Rápido (Port Forwarding)**
+Rode este comando no seu terminal:
+```bash
+kubectl -n kube-system port-forward svc/headlamp 8080:80
+```
+Depois abra `http://localhost:8080` no seu navegador.
+
+**Opção 2: Acesso Direto (NodePort)**
+1. Descubra a porta atribuída: `kubectl -n kube-system get svc headlamp`
+2. Descubra o IP Público do seu Node: `kubectl get nodes -o wide`
+3. Acesse via: `http://<NODE_PUBLIC_IP>:<NODEPORT>`
+
+**Autenticação (Token Admin)**
+Para logar, você precisará de um token. Rode estes comandos para criar uma ServiceAccount administrativa e gerar o token (ignore erros de "already exists"):
+```bash
+# 1. Criar conta de serviço
+kubectl create serviceaccount headlamp-admin -n kube-system
+
+# 2. Dar permissão de administrador (cluster-admin)
+kubectl create clusterrolebinding headlamp-admin-role --clusterrole=cluster-admin --serviceaccount=kube-system:headlamp-admin
+
+# 3. Gerar o token (Rode este sempre que precisar logar)
+kubectl create token headlamp-admin -n kube-system
+```
+Copie o token gerado no passo 3 e cole na tela de login do Headlamp.
+
 ### ⚠️ Estimativa de Recursos (Consumo ao ativar a Stack Completa)
 
 Se você ativar **todas as 3 flags como `true`**, este será aproximadamente o consumo ocioso exigido pela stack inteira rodando sobre os seus 2 Worker Nodes (que totalizam conjuntamente **4 OCPUs e 24 GB de RAM** do Always Free):
