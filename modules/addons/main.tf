@@ -28,7 +28,7 @@ resource "helm_release" "kube_prometheus_stack" {
 resource "helm_release" "headlamp" {
   count            = var.enable_headlamp ? 1 : 0
   name             = "headlamp"
-  repository       = "https://headlamp-k8s.github.io/headlamp/"
+  repository       = "https://kubernetes-sigs.github.io/headlamp/"
   chart            = "headlamp"
   namespace        = "kube-system"
   create_namespace = true
