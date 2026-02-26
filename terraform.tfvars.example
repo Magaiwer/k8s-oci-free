@@ -1,0 +1,21 @@
+# Exemplo de configuração de variáveis para o Terraform na OCI
+tenancy_ocid     = "ocid1.tenancy.oc1..xxxx"
+user_ocid        = "ocid1.user.oc1..xxxx"
+fingerprint      = "12:34:56:78:90:ab:cd:ef:12:34:56:78:90:ab:cd:ef"
+private_key_path = "/caminho/para/sua/.oci/oci_api_key.pem"
+region           = "sa-saopaulo-1"
+
+# Detalhes do Ambiente
+compartment_id      = "ocid1.compartment.oc1..xxxx"
+availability_domain = "tYvX:US-ASHBURN-AD-1"
+
+# Cluster
+cluster_name       = "meu-k8s-gratuito"
+kubernetes_version = "v1.31.1" # Cheque a versão disponivel com a CLI da oci
+
+# -----------------
+# Add-ons Opcionais (Se "true", instala via Helm no cluster gerado)
+# -----------------
+enable_rancher    = false
+enable_monitoring = false
+enable_telemetry  = false
